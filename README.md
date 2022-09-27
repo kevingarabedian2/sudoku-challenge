@@ -33,7 +33,50 @@ The solution matrices are then filtered to only allow sets that meet the interse
 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 = 45
 
 ## Methods
+```csharp
+private bool Load(string file)
+        {
+            // Perform Integrity Check (validate input)
+            // read from data/input/puzzle{0}.txt 
 
+            is_loaded = true;
+            string[] data = System.IO.File.ReadAllLines(file); // read all lines from data file into string array
+
+            for (int y = 0; y < data.Length; y++) // loop through all lines/rows from read data
+            {
+                string temp = data[y].Trim(); // trim data to normalize and remove white spaces, if exist
+                if (temp.Length == 0) // validate line/row to make sure the value is not null/empty
+                {
+                    continue; // if null/empty skip
+                }
+
+                if (temp.Length == 9) // make sure data is correct length, input should be exactly 9
+                {
+                    for (int x = 8; x > -1; x--) // loop through char values in string
+                    {
+                        switch (temp[x]) // check char against allowed values, ignore non-allowed
+                        {
+                            case '1':
+                            case '2':
+                            case '3':
+                            case '4':
+                            case '5':
+                            case '6':
+                            case '7':
+                            case '8':
+                            case '9':
+                                matrix.Add(new Point(x, y), (int)Char.GetNumericValue(temp[x])); // for values 1-9, assign to matrix game data, chast char value to int and 
+                                break;
+                            case 'X':
+                                matrix.Add(new Point(x, y), 0); // if value is 'X', store game value as 0 to make calculation easier, and add it to matrix
+                                break;
+                        }
+                    }
+                }
+            }
+            return true; // data loaded successfully
+        }
+```
 ## Features
 -    lorem ipsum
 
