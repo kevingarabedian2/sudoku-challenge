@@ -6,13 +6,14 @@ Sudoku is a number placement puzzle based on a 9x9 grid with several given numbe
 The objective of this exercise is to develop a program that solves Sudoku puzzles by filling in the empty blanks without violating any of the constraints defined in the rules, above.
 
 ## Example Sudoku Matrix
-![alt text](https://i5.walmartimages.com/asr/7af38b61-6453-4ab3-88b8-2ca4568b9d77.623c1f8ed6e4bdc3799ac3c2c0cedea2.jpeg?odnHeight=612&odnWidth=612&odnBg=FFFFFF)
+![alt text](https://github.com/kevingarabedian2/sudoku-challenge/blob/main/Example_Matrix.png?raw=true)
 
 ## Example Input Data
-![alt text](https://i5.walmartimages.com/asr/7af38b61-6453-4ab3-88b8-2ca4568b9d77.623c1f8ed6e4bdc3799ac3c2c0cedea2.jpeg?odnHeight=612&odnWidth=612&odnBg=FFFFFF)
-![alt text](https://i5.walmartimages.com/asr/7af38b61-6453-4ab3-88b8-2ca4568b9d77.623c1f8ed6e4bdc3799ac3c2c0cedea2.jpeg?odnHeight=612&odnWidth=612&odnBg=FFFFFF)
-![alt text](https://i5.walmartimages.com/asr/7af38b61-6453-4ab3-88b8-2ca4568b9d77.623c1f8ed6e4bdc3799ac3c2c0cedea2.jpeg?odnHeight=612&odnWidth=612&odnBg=FFFFFF)
-![alt text](https://i5.walmartimages.com/asr/7af38b61-6453-4ab3-88b8-2ca4568b9d77.623c1f8ed6e4bdc3799ac3c2c0cedea2.jpeg?odnHeight=612&odnWidth=612&odnBg=FFFFFF)
+![alt text](https://github.com/kevingarabedian2/sudoku-challenge/blob/main/puzzle1.png?raw=true)
+![alt text](https://github.com/kevingarabedian2/sudoku-challenge/blob/main/puzzle2.png?raw=true)
+![alt text](https://github.com/kevingarabedian2/sudoku-challenge/blob/main/puzzle3.png?raw=true)
+![alt text](https://github.com/kevingarabedian2/sudoku-challenge/blob/main/puzzle4.png?raw=true)
+![alt text](https://github.com/kevingarabedian2/sudoku-challenge/blob/main/puzzle5.png?raw=true)
 
 ## Solution
 Solution
