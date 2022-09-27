@@ -34,7 +34,7 @@ The solution matrices are then filtered to only allow sets that meet the interse
 
 ## Methods
 ```csharp
-private bool Load(string file)
+        private bool Load(string file)
         {
             // Perform Integrity Check (validate input)
             // read from data/input/puzzle{0}.txt 
@@ -77,11 +77,250 @@ private bool Load(string file)
             return true; // data loaded successfully
         }
 ```
-## Features
--    lorem ipsum
 
-# Getting Started 
- 1. lorem ipsum
- 2. lorem ipsum
-    - `npm install`
+```csharp
+        private SodokuSet GenerateSet(int x, int y)
+        {
+            SodokuSet sodokuSet = new SodokuSet();
+            SetData setData = new SetData();
+            setData.Intersection = new Point(x, y);
+            setData.Type = SetType.Vertical;
+
+            for (int y2 = 0; y2 < 9; y2++)
+            {
+                if (!setData.Plots.ContainsKey(new Point(y, y2)))
+                {
+                    setData.Plots.Add(new Point(x, y2), matrix[new Point(x, y2)]);
+                }
+            }
+            sodokuSet.Plots.Add(setData);
+
+            setData = new SetData();
+            setData.Type = SetType.Horizontal; // 
+            for (int x2 = 0; x2 < 9; x2++)
+            {
+                if (!setData.Plots.ContainsKey(new Point(x2, y)))
+                {
+                    setData.Plots.Add(new Point(x2, y), matrix[new Point(x2, y)]);
+                }
+            }
+            sodokuSet.Plots.Add(setData);
+
+            if (x == y)
+            {
+                setData = new SetData();
+                setData.Type = SetType.Diagnal;
+                for (int i = 0; i < 9; i++)
+                {
+                    if (!setData.Plots.ContainsKey(new Point(i, i)))
+                    {
+                        setData.Plots.Add(new Point(i, i), matrix[new Point(i, i)]);
+                    }
+                }
+                sodokuSet.Plots.Add(setData);
+
+                setData = new SetData();
+                setData.Type = SetType.Diagnal;
+                for (int i = 8; i > -1; i--)
+                {
+                    if (!setData.Plots.ContainsKey(new Point(i, i)))
+                    {
+                        setData.Plots.Add(new Point(i, (8 - i)), matrix[new Point(i, 8 - i)]);
+                    }
+                }
+                sodokuSet.Plots.Add(setData);
+            }
+            return sodokuSet;
+        }
+```
+```csharp
+        public void Solve()
+        {
+            for (int x = 0; x < 9; x++) // Traverse diag to obtain all intersecting sets
+            {
+                solution_sets.Add(x, GenerateSet(x, x)); // Create sets of horizontal and vertical pairs
+            }
+
+            foreach (var x in solution_sets.Keys) // loop through the calculated pairs and generate solution combos
+            {
+                var set = solution_sets[x];
+                List<int> tmpPlots = new List<int>();
+
+                Console.WriteLine("--- Processing Sets ---");
+                foreach (var obj in set.Plots)
+                {
+                    string output = "";
+
+                    foreach (var xy in obj.Plots.Keys)
+                    {
+                        int val = obj.Plots[xy];
+                        tmpPlots.Add(val);
+                        output += val + " ";
+                    }
+
+                    if (obj.Type == SetType.Diagnal)  // Ignore diagnal pairs, not needed
+                    {
+                        continue;
+                    }
+
+                    output += " => " + obj.Type.ToString();
+
+                    List<int> delta = allowed_values.Except(tmpPlots).ToList(); // calculate delts for missing possible values for data set
+                    obj.Delta = delta.ToList();
+
+                    string delta_values = "";
+                    foreach (var item in delta)
+                    {
+                        delta_values += (item + " "); // add to string for reporting and output
+                    }
+
+                    Console.WriteLine();
+                    Console.WriteLine("Values: " + output);
+                    List<Point> intersection_points = new List<Point>(); // create list to keep track of intersections
+                    List<int> intersection_values = new List<int>(); // create list to keep track of intersection values
+                    foreach (var key in obj.Plots.Keys)
+                    {
+                        if (key.X == key.Y)
+                        {
+                            intersection_points.Add(key);
+                            intersection_values.Add(obj.Plots[key]);
+                        }
+                        Console.WriteLine("Points {" + key.X + ", " + key.Y + "} => " + obj.Plots[key]);
+                    }
+                    Console.WriteLine();
+                    Console.WriteLine("Delta: " + delta_values);
+                    Console.WriteLine("Intersections: ");
+                    for (int i = 0; i < intersection_points.Count; i++)
+                    {
+                        Console.WriteLine("Plot {" + intersection_points[i].X + ", " + intersection_points[i].Y + "} => (Value) " + intersection_values[i]);
+                    }
+
+                    string combo_list = "";
+
+                    IEnumerable<IEnumerable<int>> combos = new List<IEnumerable<int>>();
+                    if (!combo_hash.ContainsKey(delta_values)) // check it previously calculated
+                    {
+                        combos = Permutate<int>(delta).ToArray(); // create array of permutations/possibilities from the delta/missing values in data set
+                        combo_hash.Add(delta_values, combos); // add permutations/possibilities to hashtable in memory to cache and speed up future calculations
+                    }
+                    else
+                    {
+                        combos = (IEnumerable<IEnumerable<int>>)combo_hash[delta_values]; // if previously calculated, use exsiting data 
+                    }
+
+                    obj.Combo_Hash_Key = delta_values; // Log hash key for permutations/possbilities to data set for future reference.
+
+                    Console.WriteLine("Combos " + combos.Count()); // Output the count of possible solutions for single data set horizontal/vertical
+
+                    foreach (var item in combos)
+                    {
+                        string combo = "";
+                        foreach (var xx in item)
+                        {
+                            combo += (xx);
+                        }
+
+                        combo_list += (combo + Environment.NewLine); // create string of combos for reporting
+                    }
+
+                    // house cleaning 
+                    intersection_points.Clear();
+                    intersection_values.Clear();
+                    tmpPlots.Clear();
+                }
+
+                Console.WriteLine();
+                Console.WriteLine("---- Attempting To Solve ----");
+
+                // Solve sets, using intersection point for common delta
+                SolveSet(x); 
+
+                Console.WriteLine();
+            }
+        }
+```
+
+```csharp
+        private string PrintSets()
+        {
+            string output = "";
+            foreach (var setKey in solution_sets.Keys)
+            {
+                Console.WriteLine("Printing Set Data ...");
+                var set = solution_sets[setKey];
+                foreach (var obj in set.Plots)
+                {
+                    Console.WriteLine(obj.Type.ToString());
+                    string tmp = "";
+                    foreach (var key in obj.Plots.Keys)
+                    {
+                        Console.WriteLine("Plot {" + key.X + ", " + key.Y + "} => " + obj.Plots[key]);
+                        tmp += obj.Plots[key];
+                    }
+                    Console.WriteLine(tmp);
+                }
+                Console.WriteLine();
+            }
+            return output;
+        }
+```
+
+```csharp
+        private string PrintMatrix(bool console = true)
+        {
+            string output = "";
+
+            Dictionary<int, int> vertSum = new Dictionary<int, int>();
+            for (int y = 8; y > -1; y--)
+            {
+                int rowSum = 0;
+                output += ((y) + " | ");
+                for (int x = 0; x < 9; x++)
+                {
+                    int val = matrix[new Point(x, y)];
+                    output += (val + "   ");
+                    rowSum += val;
+                    if (!vertSum.ContainsKey(x))
+                    {
+                        vertSum.Add(x, 0);
+                    }
+                    else
+                    {
+                        vertSum[x] += val;
+                    }
+                }
+                output += " | " + rowSum;
+                output += Environment.NewLine;
+            }
+            output += ("  ----------------------------------------");
+            output += Environment.NewLine;
+            output += ("    0   1   2   3   4   5   6   7   8");
+            output += Environment.NewLine;
+            output += ("   --- --- --- --- --- --- --- --- ---") + Environment.NewLine;
+
+            output += " ";
+            for (int i = 0; i < 9; i++)
+            {
+                output += ("  " + vertSum[i]);
+            }
+
+            if (console)
+            {
+                Console.WriteLine(output);
+            }
+            return output;
+        }
+```
+
+```csharp
+        private void Log()
+        {
+            // Write to data/output/{0}.sln.txt 
+            string output = PrintMatrix();
+            System.IO.File.WriteAllText(output_dir + System.IO.Path.GetFileName(file).Replace(".txt", ".sln.txt"), output);
+            Console.WriteLine("-- Saved Solution Game " + System.IO.Path.GetFileName(file).Replace(".txt", ".sln.txt") + " --");
+
+        }
+```
+## Example Outputs
  
