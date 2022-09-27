@@ -9,11 +9,11 @@ The objective of this exercise is to develop a program that solves Sudoku puzzle
 ![alt text](https://github.com/kevingarabedian2/sudoku-challenge/blob/main/Example_Matrix.png?raw=true)
 
 ## Example Input Data
-![alt text](https://github.com/kevingarabedian2/sudoku-challenge/blob/main/puzzle1.png?raw=true)
-![alt text](https://github.com/kevingarabedian2/sudoku-challenge/blob/main/puzzle2.png?raw=true)
-![alt text](https://github.com/kevingarabedian2/sudoku-challenge/blob/main/puzzle3.png?raw=true)
-![alt text](https://github.com/kevingarabedian2/sudoku-challenge/blob/main/puzzle4.png?raw=true)
-![alt text](https://github.com/kevingarabedian2/sudoku-challenge/blob/main/puzzle5.png?raw=true)
+![alt text](https://github.com/kevingarabedian2/sudoku-challenge/blob/main/Puzzle1.png?raw=true) 
+![alt text](https://github.com/kevingarabedian2/sudoku-challenge/blob/main/puzzle2.png?raw=true) 
+![alt text](https://github.com/kevingarabedian2/sudoku-challenge/blob/main/Puzzle3.png?raw=true) 
+![alt text](https://github.com/kevingarabedian2/sudoku-challenge/blob/main/Puzzle4.png?raw=true) 
+![alt text](https://github.com/kevingarabedian2/sudoku-challenge/blob/main/Puzzle5.png?raw=true) 
 
 ## Solution
 Solution
