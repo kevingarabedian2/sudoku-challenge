@@ -324,7 +324,7 @@ The solution matrices are then filtered to only allow sets that meet the interse
 ```
 
 ```csharp
-public IEnumerable<IEnumerable<T>> Permutate<T>(IEnumerable<T> source)
+        public IEnumerable<IEnumerable<T>> Permutate<T>(IEnumerable<T> source)
         {
             var xs = source.ToArray();
             return
